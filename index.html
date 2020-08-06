@@ -75,7 +75,7 @@
 </head>
 <body>
     <script>
-        const version = '1.0b'
+        const version = '1.0c'
 
         let audioReady = false
         const audio = new Audio()
@@ -116,6 +116,9 @@ setTimeout(() => {
             }
 
             button.className += ' button-clicked'
+            setTimeout(() => {
+                div.removeChild( button )
+            }, 5000)
             audio.play()
 
             const state = {
