@@ -38,22 +38,28 @@
             audio.play()
 
             const delay = 7500
-            setTimeout(() => {
-                const result = Math.random() >= 0.50 ? true : false
-                const text = result ? 'yes 😃' : 'NO 😠'
+            const tStart = Date.now()
+            const check = () => {
+                const delta = Date.now() - tStart
+                if ( delta >= delay ) {
+                    const result = Math.random() >= 0.50 ? true : false
+                    const text = result ? 'yes 😃' : 'NO 😠'
 
-                const element = document.createElement('span')
-                element.style.marginTop = element.style.marginBottom = 'auto'
-                element.style.transition = 'font-size 2s'
-                element.style.fontSize = '0'
-                setTimeout(() => {
-                    element.style.fontSize = '20vh'
-                }, 100)
-                element.innerHTML = text
-                div.appendChild( element )
+                    const element = document.createElement('span')
+                    element.style.marginTop = element.style.marginBottom = 'auto'
+                    element.style.transition = 'font-size 2s'
+                    element.style.fontSize = '0'
+                    setTimeout(() => {
+                        element.style.fontSize = '20vh'
+                    }, 100)
+                    element.innerHTML = text
+                    div.appendChild( element )
 
-            }, delay)
-
+                    return
+                }
+                requestAnimationFrame( check )
+            }
+            check()
         })
 
         const verLabel = document.createElement('span')
