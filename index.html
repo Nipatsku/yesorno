@@ -1,6 +1,8 @@
 <body>
     <script>
 
+        const version = 'v0.1'
+
         let audioReady = false
         const audio = new Audio()
         audio.src = 'yooooo.mp3'
@@ -53,6 +55,13 @@
             }, delay)
 
         })
+
+        const verLabel = document.createElement('span')
+        verLabel.style.position = 'fixed'
+        verLabel.style.left = '0'
+        verLabel.style.bottom = '0'
+        verLabel.innerHTML = version
+        div.appendChild( verLabel )
 
     </script>
 
