@@ -4,10 +4,12 @@
         let audioReady = false
         const audio = new Audio()
         audio.src = 'yooooo.mp3'
-        audio.addEventListener( 'canplay', ()  => {
+        const markReady = () => {
             audioReady = true
             button.style.backgroundColor = '#00FF00'
-        })
+        }
+        audio.addEventListener( 'loadedmetadata', markReady)
+        audio.addEventListener( 'canplay', markReady)
 
         const div = document.createElement('div')
         div.style.width = '100%',
