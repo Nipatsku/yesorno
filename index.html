@@ -1,0 +1,21 @@
+<body>
+    <script>
+
+        const result = Math.random() >= 0.50 ? true : false
+        const text = result ? 'yes 😃' : 'NO 😠'
+
+        const div = document.createElement('div')
+        div.style.width = '100%',
+        div.style.height = '100%',
+        div.style.display = 'flex'
+        div.style.justifyContent = 'space-around'
+        document.body.appendChild( div )
+
+        const element = document.createElement('span')
+        element.style.marginTop = element.style.marginBottom = 'auto'
+        element.style.fontSize = '20vh'
+        element.innerHTML = text
+        div.appendChild( element )
+
+    </script>
+</body>
