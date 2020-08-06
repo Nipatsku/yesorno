@@ -1,8 +1,12 @@
 <body>
     <script>
 
-        const result = Math.random() >= 0.50 ? true : false
-        const text = result ? 'yes 😃' : 'NO 😠'
+        let audioReady = false
+        const audio = new Audio()
+        audio.src = 'yooooo.mp3'
+        audio.addEventListener( 'canplay', ()  => {
+            audioReady = true
+        })
 
         const div = document.createElement('div')
         div.style.width = '100%',
@@ -11,11 +15,75 @@
         div.style.justifyContent = 'space-around'
         document.body.appendChild( div )
 
-        const element = document.createElement('span')
-        element.style.marginTop = element.style.marginBottom = 'auto'
-        element.style.fontSize = '20vh'
-        element.innerHTML = text
-        div.appendChild( element )
+        const button = document.createElement('button')
+        button.style.height = 'fit-content'
+        button.style.marginTop = button.style.marginBottom = 'auto'
+        button.innerHTML = 'yes or no?'
+        div.appendChild( button )
+
+        button.addEventListener('click', async e => {
+            div.removeChild( button )
+
+            await new Promise(async resolve => {
+                while ( ! audioReady ) {
+                    await new Promise( r => setTimeout(r, 100) )
+                }
+                resolve()
+            })
+            audio.play()
+
+            const delay = 7500
+            setTimeout(() => {
+                const result = Math.random() >= 0.50 ? true : false
+                const text = result ? 'yes 😃' : 'NO 😠'
+
+                const element = document.createElement('span')
+                element.style.marginTop = element.style.marginBottom = 'auto'
+                element.style.transition = 'font-size 2s'
+                element.style.fontSize = '0'
+                setTimeout(() => {
+                    element.style.fontSize = '20vh'
+                }, 100)
+                element.innerHTML = text
+                div.appendChild( element )
+
+            }, delay)
+
+        })
 
     </script>
+
+    <!-- <iframe id="existing-iframe-example"
+        width="640" height="360"
+        src="https://www.youtube.com/embed/NuU951h--cU?autoplay=1&enablejsapi=1"
+        frameborder="0"
+        allow="autoplay"
+        style="border: solid 4px #37474F"
+    ></iframe>
+
+    <script type="text/javascript">
+        var tag = document.createElement('script');
+        tag.id = 'iframe-demo';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('existing-iframe-example', {
+                events: {
+                    'onReady': onPlayerReady,
+                },
+                playerVars: {
+                    "autoplay": 1
+                }
+            });
+        }
+        function onPlayerReady(event) {
+            // console.log('boom')
+            // event.target.setVolume(100);
+            // event.target.playVideo();
+            
+        }
+    </script> -->
 </body>
