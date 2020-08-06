@@ -1,7 +1,7 @@
 <body>
     <script>
 
-        const version = 'v0.1'
+        const version = 'v0.1b'
 
         let audioReady = false
         const audio = new Audio()
@@ -37,11 +37,10 @@
             div.removeChild( button )
             audio.play()
 
-            const delay = 7500
-            const tStart = Date.now()
+            const delay = 7.5
             const check = () => {
-                const delta = Date.now() - tStart
-                if ( delta >= delay ) {
+                const pos = audio.currentTime
+                if ( pos >= delay ) {
                     const result = Math.random() >= 0.50 ? true : false
                     const text = result ? 'yes 😃' : 'NO 😠'
 
