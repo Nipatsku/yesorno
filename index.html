@@ -1,7 +1,77 @@
+<head>
+    <style>
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .start-button {
+            height: fit-content;
+            margin-top: auto;
+            margin-bottom: auto;
+            font-size: 10vh;
+            border-radius: 5vh;
+            padding-left: 5vh;
+            padding-right: 5vh;
+        }
+        .pepe {
+            transform: rotateY(180deg);
+            position: fixed;
+            right: 0;
+            bottom: -100vh;
+            transition: bottom 5s;
+        }
+        .dude {
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            opacity: 0.3;
+        }
+        .result {
+            z-index: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+            transition: font-size 2s;
+            font-size: 0;
+        }
+    
+        @media only screen and ( orientation: landscape ) {
+            .dude {
+                left: -100vw;
+                transition: left 1.5s;
+            }
+            .dude-visible {
+                left: -5px;
+            }
+            .pepe {
+                height: 60vh;
+            }
+            .result-visible {
+                font-size: 20vh;
+            }
+        }
+
+        @media only screen and ( orientation: portrait ) {
+            .dude {
+                right: 100vw;
+                transition: right 3s;
+            }
+            .dude-visible {
+                right: 0;
+            }
+            .pepe {
+                width: 70vw;
+            }
+            .result-visible {
+                font-size: 20vw;
+            }
+        }
+    </style>
+</head>
 <body>
     <script>
-
-        const version = '1.0'
+        const version = '1.0a'
 
         let audioReady = false
         const audio = new Audio()
@@ -14,41 +84,22 @@
         audio.addEventListener( 'canplay', markReady)
 
         const div = document.createElement('div')
-        div.style.width = '100%',
-        div.style.height = '100%',
-        div.style.display = 'flex'
-        div.style.justifyContent = 'space-around'
+        div.className = 'container'
         document.body.appendChild( div )
 
         const button = document.createElement('button')
-        button.style.height = 'fit-content'
-        button.style.marginTop = button.style.marginBottom = 'auto'
-        button.style.fontSize = '10vh'
-        button.style.borderRadius = '5vh'
-        button.style.paddingLeft = button.style.paddingRight = '5vh'
+        button.className = 'start-button'
         button.innerHTML = 'yes or no?'
         div.appendChild( button )
 
         const pepe = document.createElement('img')
+        pepe.className = 'pepe'
         pepe.src = 'pepe.png'
-        pepe.style.transform = 'rotateY(180deg)'
-        pepe.style.position = 'fixed'
-        pepe.style.right = 0
-        pepe.style.bottom = '-100vh'
-        pepe.style.height = '60vh'
-        // pepe.style.opacity = '0.3'
-        pepe.style.transition = 'bottom 5s'
         div.appendChild( pepe )
 
         const dude = document.createElement('img')
+        dude.className = 'dude'
         dude.src = 'dude.png'
-        dude.style.position = 'fixed'
-        dude.style.left = 0
-        dude.style.left = '-100vw'
-        dude.style.top = 0
-        dude.style.height = '100vh'
-        dude.style.opacity = '0.3'
-        dude.style.transition = 'left 3s'
         div.appendChild( dude )
 
 
@@ -76,19 +127,16 @@ setTimeout(() => {
                     const result = Math.random() >= 0.50 ? true : false
                     const text = result ? 'yes 😃' : 'NO 😠'
                     const element = document.createElement('span')
-                    element.style.zIndex = 0
-                    element.style.marginTop = element.style.marginBottom = 'auto'
-                    element.style.transition = 'font-size 2s'
-                    element.style.fontSize = '0'
+                    element.className = 'result'
                     setTimeout(() => {
-                        element.style.fontSize = '20vh'
+                        element.className += ' result-visible'
                     }, 100)
                     element.innerHTML = text
                     div.appendChild( element )
                 }
-                if ( pos >= 7.1 && !state.dude ) {
+                if ( pos >= 7.8 && !state.dude ) {
                     state.dude = true
-                    dude.style.left = '-5px'
+                    dude.className += ' dude-visible'
                 }
                 const pepeEnd = 7.2
                 if ( pos >= 1.0 && pos < pepeEnd && !state.pepe ) {
