@@ -75,7 +75,107 @@
 </head>
 <body>
     <script>
-        const version = '1.0c'
+        const version = '1.1.0d'
+
+        const Randomizer = (() => {
+
+            const getPureRandom = () => {
+                return Math.random() >= 0.50
+            }
+
+            // Practical random generator.
+            const { getPracticalRandom, resetPracticalRandomHistory } = (() => {
+                const key = '3c123c1231d23d123c123c123d'
+                let history = []
+
+                //#region Load from local storage.
+                try {
+                    const storage = localStorage.getItem( key )
+                    if ( storage ) {
+                        history = JSON.parse( storage )
+                        if ( history.length > 0 ) {
+                            const msg = `Loaded practical random history from localStorage (${ history.length } records)`
+                            console.log( msg )
+                            alert( msg )
+                        }
+                    }
+                } catch (e) {
+                    console.error( e.message )
+                }
+                //#endregion
+
+                const _getWeightedYesChange = ( yesAmount, noAmount ) => {
+                    const normal = 0.50
+                    if ( yesAmount === noAmount ) {
+                        return normal
+                    }
+
+                    const diffAbs = Math.abs( yesAmount - noAmount )
+                    const impactDirection = Math.sign( noAmount - yesAmount )
+
+                    // y = x^3 + log10( x + 3 ) * 23
+                    const propabilityDiff = 0.01 * ( Math.pow( diffAbs, 3 ) + Math.log10( diffAbs + 3 ) * 23 )
+                    const propability = normal + propabilityDiff * impactDirection
+                    return propability
+                }
+
+                const _saveHistory = () => {
+                    try {
+                        localStorage.setItem( key, JSON.stringify( history ) )
+                        return true
+
+                    } catch ( e ) {
+                        console.error( e.message )
+                        return false
+                    }
+                }
+
+                const getPracticalRandom = () => {
+                    // Count amount of previous yes / no results.
+                    const amounts = history.reduce(( prev, cur ) => {
+                        const result = cur.result
+                        if ( result ) {
+                            prev.yes ++
+                        } else {
+                            prev.no ++
+                        }
+                        return prev
+                    }, { yes: 0, no: 0 })
+
+                    // Get weighted propability of "yes".
+                    const propability = _getWeightedYesChange( amounts.yes, amounts.no )
+
+                    // Randomize.
+                    const result = Math.random() <= propability
+
+                    // Mark result down in history.
+                    history.push({
+                        result,
+                        time: Date.now()
+                    })
+
+                    if ( !_saveHistory() ) {
+                        // Error practical random not usable.
+                        alert(`PANIC - There was an unexpected error while randomizing!`)
+                    }
+
+                    return result
+                }
+
+                const resetPracticalRandomHistory = () => {
+                    history = []
+                    _saveHistory()
+                }
+                
+                return { getPracticalRandom, resetPracticalRandomHistory }
+            })()
+
+            return {
+                getPureRandom,
+                getPracticalRandom,
+                resetPracticalRandomHistory
+            }
+        })()
 
         let audioReady = false
         const audio = new Audio()
@@ -106,16 +206,13 @@
         dude.src = 'dude.png'
         div.appendChild( dude )
 
-
-setTimeout(() => {
-    
-}, 100)
-        button.addEventListener('click', e => {
+        const handleButtonClick = e => {
             if ( !audioReady ) {
                 return
             }
 
             button.className += ' button-clicked'
+            button.removeEventListener('click', handleButtonClick )
             setTimeout(() => {
                 div.removeChild( button )
             }, 5000)
@@ -131,7 +228,7 @@ setTimeout(() => {
                 if ( pos >= 7.5 && !state.smiley ) {
                     state.smiley = true
 
-                    const result = Math.random() >= 0.50 ? true : false
+                    const result = Randomizer.getPracticalRandom()
                     const text = result ? 'yes 😃' : 'NO 😠'
                     const element = document.createElement('span')
                     element.className = 'result'
@@ -158,7 +255,9 @@ setTimeout(() => {
                 requestAnimationFrame( check )
             }
             check()
-        })
+
+        }
+        button.addEventListener('click', handleButtonClick )
 
         const verLabel = document.createElement('span')
         verLabel.style.position = 'fixed'
