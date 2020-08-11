@@ -75,7 +75,7 @@
 </head>
 <body>
     <script>
-        const version = '1.1.0e'
+        const version = '1.1a'
 
         const Randomizer = (() => {
 
@@ -87,9 +87,6 @@
             const { getPracticalRandom, resetPracticalRandomHistory } = (() => {
                 const key = '3c123c1231d23d123c123c123d'
                 let history = []
-
-
-
 
                 //#region Load from local storage.
                 try {
@@ -131,20 +128,6 @@
                         return false
                     }
                 }
-
-                history.push({
-                    result: false,
-                    time: Date.now()
-                })
-                history.push({
-                    result: false,
-                    time: Date.now()
-                })
-                history.push({
-                    result: false,
-                    time: Date.now()
-                })
-                _saveHistory()
 
                 const getPracticalRandom = () => {
                     // Count amount of previous yes / no results.
