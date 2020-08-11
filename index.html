@@ -75,7 +75,7 @@
 </head>
 <body>
     <script>
-        const version = '1.1.0e'
+        const version = '1.1.0d'
 
         const Randomizer = (() => {
 
@@ -144,6 +144,7 @@
                     result: false,
                     time: Date.now()
                 })
+                _saveHistory()
 
                 const getPracticalRandom = () => {
                     // Count amount of previous yes / no results.
