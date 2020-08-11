@@ -88,6 +88,9 @@
                 const key = '3c123c1231d23d123c123c123d'
                 let history = []
 
+
+
+
                 //#region Load from local storage.
                 try {
                     const storage = localStorage.getItem( key )
@@ -96,7 +99,6 @@
                         if ( history.length > 0 ) {
                             const msg = `Loaded practical random history from localStorage (${ history.length } records)`
                             console.log( msg )
-                            alert( msg )
                         }
                     }
                 } catch (e) {
@@ -129,6 +131,19 @@
                         return false
                     }
                 }
+
+                history.push({
+                    result: false,
+                    time: Date.now()
+                })
+                history.push({
+                    result: false,
+                    time: Date.now()
+                })
+                history.push({
+                    result: false,
+                    time: Date.now()
+                })
 
                 const getPracticalRandom = () => {
                     // Count amount of previous yes / no results.
