@@ -75,7 +75,7 @@
 </head>
 <body>
     <script>
-        const version = '1.1a'
+        const version = '1.2'
 
         const Randomizer = (() => {
 
@@ -103,10 +103,11 @@
                 }
                 //#endregion
 
-                const _getWeightedYesChange = ( yesAmount, noAmount ) => {
+                const _getWeightedYesChange = ( yesAmount, noAmount, todayYesAmount ) => {
                     const normal = 0.50
+                    const factorTodayYesAmount = Math.pow( 0.5, todayYesAmount )
                     if ( yesAmount === noAmount ) {
-                        return normal
+                        return normal * factorTodayYesAmount
                     }
 
                     const diffAbs = Math.abs( yesAmount - noAmount )
@@ -114,7 +115,7 @@
 
                     // y = x^3 + log10( x + 3 ) * 23
                     const propabilityDiff = 0.01 * ( Math.pow( diffAbs, 3 ) + Math.log10( diffAbs + 3 ) * 23 )
-                    const propability = normal + propabilityDiff * impactDirection
+                    const propability = ( normal + propabilityDiff * impactDirection ) * factorTodayYesAmount
                     return propability
                 }
 
@@ -130,19 +131,27 @@
                 }
 
                 const getPracticalRandom = () => {
-                    // Count amount of previous yes / no results.
+                    // Count amount of yes / no results from PREVIOUS days (not today).
+                    const today = new Date()
                     const amounts = history.reduce(( prev, cur ) => {
-                        const result = cur.result
+                        const { result, time } = cur
+                        if ( new Date( time ).getDate() === today.getDate() ) {
+                            if ( result ) {
+                                prev.today ++
+                            }
+                            return prev
+                        }
+
                         if ( result ) {
                             prev.yes ++
                         } else {
                             prev.no ++
                         }
                         return prev
-                    }, { yes: 0, no: 0 })
+                    }, { yes: 0, no: 0, today: 0 })
 
                     // Get weighted propability of "yes".
-                    const propability = _getWeightedYesChange( amounts.yes, amounts.no )
+                    const propability = _getWeightedYesChange( amounts.yes, amounts.no, amounts.today )
 
                     // Randomize.
                     const result = Math.random() <= propability
