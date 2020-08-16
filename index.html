@@ -81,7 +81,7 @@
 </head>
 <body>
     <script>
-        const version = '1.2.1b'
+        const version = '1.2.1c'
         /**
          * A linear interpolator for hexadecimal colors
          * @param {String} a
@@ -129,11 +129,11 @@
                 }
                 //#endregion
 
-                const _getWeightedYesChange = ( yesAmount, noAmount, todayYesAmount ) => {
+                const _getWeightedYesChange = ( yesAmount, noAmount, todayAmount ) => {
                     const normal = 0.50
-                    const factorTodayYesAmount = Math.pow( 0.5, todayYesAmount )
+                    const factorTodayAmount = Math.pow( 0.5, todayAmount )
                     if ( yesAmount === noAmount ) {
-                        return normal * factorTodayYesAmount
+                        return normal * factorTodayAmount
                     }
 
                     const diffAbs = Math.abs( yesAmount - noAmount )
@@ -141,7 +141,7 @@
 
                     // y = x^3 + log10( x + 3 ) * 23
                     const propabilityDiff = 0.01 * ( Math.pow( diffAbs, 3 ) + Math.log10( diffAbs + 3 ) * 23 )
-                    const propability = ( normal + propabilityDiff * impactDirection ) * factorTodayYesAmount
+                    const propability = ( normal + propabilityDiff * impactDirection ) * factorTodayAmount
                     return propability
                 }
 
@@ -162,9 +162,7 @@
                     return history.reduce(( prev, cur ) => {
                         const { result, time } = cur
                         if ( new Date( time ).getDate() === today.getDate() ) {
-                            if ( result ) {
-                                prev.today ++
-                            }
+                            prev.today ++
                             return prev
                         }
 
