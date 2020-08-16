@@ -81,7 +81,7 @@
 </head>
 <body>
     <script>
-        const version = '1.2.1d'
+        const version = '1.2.1e'
         /**
          * A linear interpolator for hexadecimal colors
          * @param {String} a
@@ -271,7 +271,7 @@
         const yesPropability = Randomizer.getPracticalPropability()
         const propability = document.createElement('span')
         propability.className = 'propability'
-        propability.innerHTML = `${ (yesPropability * 100).toFixed(1) } %`
+        propability.innerHTML = `${ (yesPropability * 100).toString() } %`
         if ( yesPropability > 0.5 )
             propability.style.color = lerpColor( '#000000', '#00ff00', Math.min( ( yesPropability - 0.5 ) * 3, 1 ) )
         else
