@@ -81,7 +81,7 @@
 </head>
 <body>
     <script>
-        const version = '1.2.1c'
+        const version = '1.2.1d'
         /**
          * A linear interpolator for hexadecimal colors
          * @param {String} a
@@ -127,6 +127,15 @@
                 } catch (e) {
                     console.error( e.message )
                 }
+
+                // const day = 1 * 24 * 60 * 60 * 1000
+                // history = [
+                //     { result: false, time: Date.now() - day },
+                //     { result: false, time: Date.now() - day },
+                //     { result: true, time: Date.now() - day },
+                //     { result: true, time: Date.now() - day * 2 },
+                // ]
+
                 //#endregion
 
                 const _getWeightedYesChange = ( yesAmount, noAmount, todayAmount ) => {
@@ -159,10 +168,17 @@
                 const _countAmounts = () => {
                     // Count amount of yes / no results from PREVIOUS days (not today).
                     const today = new Date()
+                    const daysCounted = []
                     return history.reduce(( prev, cur ) => {
                         const { result, time } = cur
                         if ( new Date( time ).getDate() === today.getDate() ) {
                             prev.today ++
+                            return prev
+                        }
+
+                        // Only count one result per day.
+                        if ( daysCounted.find( date => date.getDate() === new Date( time ).getDate() ) !== undefined ) {
+                            // Already counted with this date.
                             return prev
                         }
 
@@ -171,6 +187,8 @@
                         } else {
                             prev.no ++
                         }
+
+                        daysCounted.push( new Date( time ) )
                         return prev
                     }, { yes: 0, no: 0, today: 0 })
                 }
