@@ -1,4 +1,4 @@
 
-I don't want to explain it, please just try it instead (click on the picture):
+There is no explanation, only demonstration:
 
-[![Screenshot](https://nipatsku.github.io/yesorno/screenshot.png)](https://nipatsku.github.io/yesorno/)
+[Clickity click](https://nipatsku.github.io/yesorno/)
